@@ -1,0 +1,51 @@
+DRY Principle in software engineering:
+Dont Repeat Yourself is a principle of software development aimed at reducing repetition of software patterns.
+
+Centralized structure:
+We can centralize the terraform resources and can call out from TF Files whenever required.
+
+/dev/modules/ec2
+resource "aws_instance" "myec2"{
+ami = "1234ewq"
+instance_type = "t2.micro"
+}
+
+/dev/projects/A/
+module "ec2module"{
+  source = "../../modules/ec2"
+}
+
+terraform init to install modules and download provider related plugins.
+---------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+Using Variables:
+
+var.tf
+variable "instance_type"{
+default = "t2.micro"
+}
+
+/dev/modules/ec2
+resource "aws_instance" "myec2"{
+ami = "1234ewq"
+instance_type = var.instance_type
+}
+
+/dev/projects/A/
+module "ec2module"{
+  source = "../../modules/ec2"
+  instance_type = "t3.large"
+}
+
+###here ami is hard coded so cant be overritten however instance_type is created using variables so can be
+
+-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
+Terraform registory: Its a registry of modules written by terraform community.
+We can find varified  terraform modules maintained by varioud third party vendors
+
+module "ec2module"{
+  source = "terraform-aws-module/ec2_instance/aws"
+  version = "2.13.0"
+  --required variables
+}
